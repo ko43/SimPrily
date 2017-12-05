@@ -1,5 +1,6 @@
 from subprocess import Popen
 import sys
+import os
 
 def run_germline(ped_name, map_name, out_name, min_m):
     '''
@@ -21,6 +22,16 @@ def run_germline(ped_name, map_name, out_name, min_m):
         return germ_flag
     else:
         sys.exit("Run_germline failure")
+    '''
+    try:
+        bash_command = 'bash ./bin/phasing_pipeline/gline.sh ./bin/germline-1-5-1/germline  {0} {1} {2} "-bits 10 -min_m {3}"'.format(
+        ped_name, map_name, out_name, str(min_m))
+        print( bash_command)
+        germ_flag = Popen.wait(Popen(bash_command, shell=True))
+        return germ_flag
+    except Exception as e:
+        sys.exit("Run_germline failure")
+    '''
 
 
 def process_germline_file(germfile_name, name_list):
@@ -28,6 +39,8 @@ def process_germline_file(germfile_name, name_list):
     Creates a list of all IBD pair options, and a dictionary of the pair options pointing 
     to lists of corresponding segments from the germfile.
     """
+    print("THIS IS THE GERMFILE_NAME PARAMETER: " + str(germfile_name))
+    print("THIS IS THE NAME_LIST: " + str(name_list))
     germline_file = open(str(germfile_name) + '.match', 'r')
     ## Create a list of all UNIQUE possible pairs from name_list (A_B and B_A are considered the same, A_A is also allowed)
     pair_list = ['{0}{1}'.format(name_list[i], name_list[j]) for i in range(len(name_list)) for j in range(len(name_list)) if j>=i]
@@ -35,6 +48,13 @@ def process_germline_file(germfile_name, name_list):
 
     for line in germline_file:
         process_germline_line(line, pair_list, pair_dict)
+    germline_file.seek(0)
+    first_char = germline_file.read(1)
+    if not first_char:
+        print("The germline_file is empty. This is from the process_germline_file function. ")
+        sys.exit()
+    else:   
+        germline_file.seek(0)
     germline_file.close()
     return [pair_list, pair_dict]
 

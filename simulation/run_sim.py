@@ -43,7 +43,7 @@ def run_macs(macs_args, sequences):
         else:
             break
     #print("THIS IS SEQUENCES zero: " + str(sequences[0].__dict__))
-    print("THIS IS SEQUENCES one: " + str(sequences[1].__dict__))
+    #print("THIS IS SEQUENCES one: " + str(sequences[1].__dict__))
  #   print("THIS IS position:  " + str(position))
  #   debugPrint(2,"Finished macs simulation")
     return [sequences,position]
