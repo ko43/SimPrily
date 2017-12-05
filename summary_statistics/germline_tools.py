@@ -1,16 +1,27 @@
 from subprocess import Popen
+import sys
 
 def run_germline(ped_name, map_name, out_name, min_m):
+    '''
+    Parameters:
+        ped_name = output_dir/sim_data/macs_asc_1_chr1.ped
+        map_name= output_dir/sim_data/macs_asc_1_chr1.map
+        out_name= output_dir/germline_out/macs_asc_1_chr1
+        min_m = 300
+
+    Return: 0
+    '''
     print("THIS IS THE ")
     print( 'Running Germline on ' + ped_name + ' ' + map_name)
-
     bash_command = 'bash ./bin/phasing_pipeline/gline.sh ./bin/germline-1-5-1/germline  {0} {1} {2} "-bits 10 -min_m {3}"'.format(
         ped_name, map_name, out_name, str(min_m))
     print( bash_command)
-
     germ_flag = Popen.wait(Popen(bash_command, shell=True))
-    print( 'finished running germline')
-    return germ_flag
+    if germ_flag == 0:
+        return germ_flag
+    else:
+        sys.exit("Run_germline failure")
+
 
 def process_germline_file(germfile_name, name_list):
     """
@@ -24,7 +35,6 @@ def process_germline_file(germfile_name, name_list):
 
     for line in germline_file:
         process_germline_line(line, pair_list, pair_dict)
-
     germline_file.close()
     return [pair_list, pair_dict]
 
