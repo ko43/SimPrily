@@ -8,13 +8,13 @@ def store_segregating_site_stats(seq_list, results, head_list):
     for seq in seq_list:
         if seq.type == 'discovery':
             current_res = afs_stats_bitarray.base_S_ss( seq.CGI_bits, seq.genotyped )
-            if not current_res:
-                print('base_S_ss did not return a value (called in store_segregating_site_stats).')
-                raise AssertionError()
+           # if not current_res:
+            #    print('base_S_ss did not return a value (called in store_segregating_site_stats).')
+               # raise AssertionError()
             seq.pi_CGIs = afs_stats_bitarray.Pi2( current_res.pop(3), seq.genotyped )
-            if not seq.pi_CGIs:
-                print('Pi2 did not return a value (called in store_segregating_site_stats).')
-                raise AssertionError()
+            #if not seq.pi_CGIs:
+             #   print('Pi2 did not return a value (called in store_segregating_site_stats).')
+                #raise AssertionError()
             current_res.append( afs_stats_bitarray.Tajimas( seq.pi_CGIs, current_res[0], seq.genotyped ) )
 
             results.extend(current_res)
@@ -47,9 +47,9 @@ def store_IBD_stats(stat_dict, pair_list, pair_dict, results, head_list, min_val
                 head_list.append('IBD_{}_{}'.format(choice,pair))
             else:
                 head_list.append('IBD{}_{}_{}'.format(min_val, choice, pair))
-    if before_results_append == len(results):
-        print('stat_func did not return anything (in store_IBD_stats)')
-        raise AssertionError()
+    #if before_results_append == len(results):
+     #   print('stat_func did not return anything (in store_IBD_stats)')
+       # raise AssertionError()
 
 def store_array_segregating_site_stats(seq_list, results, head_list):
     for seq in seq_list:
@@ -59,25 +59,26 @@ def store_array_segregating_site_stats(seq_list, results, head_list):
 
         code_asc = []
         ss_code_asc = afs_stats_bitarray.base_S_ss(asc_bits, n)
-        if not ss_code_asc:
-            print('base_S_ss did not return anything (from store_array_segregating_site_stats).')
-            raise AssertionError()
-        elif (ss_code_asc[0] == 0):
+       # if not ss_code_asc:
+       #     print('base_S_ss did not return anything (from store_array_segregating_site_stats).')
+       #     raise AssertionError()
+        #elif (ss_code_asc[0] == 0):
+        if (ss_code_asc[0] == 0):
             for i in xrange(5):
                 code_asc.append(0)
             pi_code_asc = 0
         else:
             code_asc.extend( afs_stats_bitarray.base_S_ss(asc_bits, n) )
             pi_code_asc = afs_stats_bitarray.Pi2(code_asc[3], n)
-            if not pi_code_asc:
-                print('Pi2 did not return anything (from store_array_segregating_site_stats)')
-                raise AssertionError()
+           # if not pi_code_asc:
+           #     print('Pi2 did not return anything (from store_array_segregating_site_stats)')
+           #     raise AssertionError()
             code_asc.append(pi_code_asc)
-            tajimas_return = afs_stats_bitarray.Tajimas(pi_code_asc, code_asc[0], n)
-            if not tajimas_return:
-                print('Tajimas did not return anything (from store_array_segregating_site_stats)')
-                raise AssertionError()
-            code_asc.append(tajimas_return)
+            #tajimas_return = afs_stats_bitarray.Tajimas(pi_code_asc, code_asc[0], n)
+           # if not tajimas_return:
+           #     print('Tajimas did not return anything (from store_array_segregating_site_stats)')
+           #     raise AssertionError()
+            code_asc.append(afs_stats_bitarray.Tajimas(pi_code_asc, code_asc[0], n))
             del (code_asc[3])
         seq.pi_asc = pi_code_asc
 
@@ -92,9 +93,9 @@ def store_array_FSTs(seq_list, results, head_list):
                 size1 = seq1.genotyped if seq1.type == 'discovery' else seq1.tot
                 size2 = seq2.genotyped if seq2.type == 'discovery' else seq2.tot
 
-                fst1_return = afs_stats_bitarray.FST2( seq1.asc_bits, seq1.pi_asc, size1, seq2.asc_bits, seq2.pi_asc, size2)
-                if not fst1_return:
-                    print('FST2 did not return anything (from store_array_FSTs)')
-                    raise AssertionError()
-                results.append(fst1_return)
+               # fst1_return = afs_stats_bitarray.FST2( seq1.asc_bits, seq1.pi_asc, size1, seq2.asc_bits, seq2.pi_asc, size2)
+              #  if not fst1_return:
+               #     print('FST2 did not return anything (from store_array_FSTs)')
+                #    raise AssertionError()
+                results.append(afs_stats_bitarray.FST2( seq1.asc_bits, seq1.pi_asc, size1, seq2.asc_bits, seq2.pi_asc, size2))
                 head_list.append('FST_{}_{}_ASC'.format(seq1.name, seq2.name))
