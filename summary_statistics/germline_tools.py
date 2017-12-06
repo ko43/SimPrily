@@ -39,8 +39,7 @@ def process_germline_file(germfile_name, name_list):
     Creates a list of all IBD pair options, and a dictionary of the pair options pointing 
     to lists of corresponding segments from the germfile.
     """
-    print("THIS IS THE GERMFILE_NAME PARAMETER: " + str(germfile_name))
-    print("THIS IS THE NAME_LIST: " + str(name_list))
+    
     germline_file = open(str(germfile_name) + '.match', 'r')
     ## Create a list of all UNIQUE possible pairs from name_list (A_B and B_A are considered the same, A_A is also allowed)
     pair_list = ['{0}{1}'.format(name_list[i], name_list[j]) for i in range(len(name_list)) for j in range(len(name_list)) if j>=i]
