@@ -33,6 +33,13 @@ def make_ped_file(file_name, seq_list):
         elif seq.type == 'sample':
             n = seq.tot
         write_ped(fileped, seq, n)
+    fileped.seek(0)
+    first_char = fileped.read(1)
+    if not first_char:
+        print('The fileped file from make_ped_file is empty.')
+        raise AssertionError()
+    else: 
+        fileped.seek(0)
     fileped.close()
 
 def write_ped(fped, sequence, n):
@@ -54,4 +61,11 @@ def make_map_file(file_name, p_asc, n_c, sites):
     for asc in p_asc:
         map_str = '{0} chr{0}_{1} {2} {3}\n'.format( n_c, asc, int(sites[asc] - 1), int(sites[asc]) )
         filemap.write(map_str)
+    filemap.seek(0)
+    first_char = filemap.read(1)
+    if not first_char:
+        print('The filemap file from make_map_file is empty.')
+        raise AssertionError()
+    else:
+        filemap.seek(0)
     filemap.close()
